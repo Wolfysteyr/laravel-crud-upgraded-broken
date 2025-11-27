@@ -10,8 +10,20 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'name', 
         'quantity',
         'description',
     ];
+
+    function decreaseQuantity(){
+        if ($this->quantity - 1 >= 0){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    function increaseQuantity(){
+        return true;
+    }
+
 }

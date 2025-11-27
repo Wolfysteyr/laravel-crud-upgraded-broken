@@ -59,12 +59,13 @@ class ProductController extends Controller
                 ->with('message', "Product updated successfully");
     }
 
-    public function decreaseQuantity(Request $request, Product $product) {
-        $request->validate([
-            'amount' => 'required|integer|min:1',
-        ]);
+    public function decreaseQuantity( Product $product) {
 
-        if ($product->decreaseQuantity($request->amount)) {
+
+        if ($product->decreaseQuantity()) {
+            $product->quantity = $product->quantity - 1;
+            $product->save();
+
             return redirect()
                     ->route('products.show', [$product])
                     ->with('message', "Product quantity decreased successfully");
@@ -72,6 +73,17 @@ class ProductController extends Controller
             return redirect()
                     ->route('products.show', [$product])
                     ->withErrors(['amount' => 'Not enough stock to decrease quantity.']);
+        }
+    }
+
+    public function increaseQuantity( Product $product) {
+
+        if ($product->increaseQuantity()) {
+            $product->quantity = $product->quantity + 1;
+            $product->save();
+            return redirect()
+                    ->route('products.show', [$product])
+                    ->with('message', "Product quantity increased successfully");
         }
     }
 }
