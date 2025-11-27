@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Tag;
 use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
@@ -73,5 +74,22 @@ class ProductController extends Controller
                     ->route('products.show', [$product])
                     ->withErrors(['amount' => 'Not enough stock to decrease quantity.']);
         }
+    }
+
+    public function storeTag(Request $request, Product $product) {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $tag = Tag::firstOrCreate(['name' => $validated['name']]);
+        $product->tags()->syncWithoutDetaching([$tag->id]);
+
+        return redirect()->route('products.show', $product)->with('success', 'Tags veiksmīgi pievienots');
+    }
+
+    public function destroyTag(Product $product, Tag $tag) {
+        $product->tags()->detach($tag->id);
+
+        return redirect()->route('products.show', $product)->with('success', 'Tags veiksmīgi noņemts');
     }
 }
