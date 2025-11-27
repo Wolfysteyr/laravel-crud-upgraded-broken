@@ -60,12 +60,13 @@ class ProductController extends Controller
                 ->with('message', "Product updated successfully");
     }
 
-    public function decreaseQuantity(Request $request, Product $product) {
-        $request->validate([
-            'amount' => 'required|integer|min:1',
-        ]);
+    public function decreaseQuantity( Product $product) {
 
-        if ($product->decreaseQuantity($request->amount)) {
+
+        if ($product->decreaseQuantity()) {
+            $product->quantity = $product->quantity - 1;
+            $product->save();
+
             return redirect()
                     ->route('products.show', [$product])
                     ->with('message', "Product quantity decreased successfully");
@@ -91,5 +92,14 @@ class ProductController extends Controller
         $product->tags()->detach($tag->id);
 
         return redirect()->route('products.show', $product)->with('success', 'Tags veiksmīgi noņemts');
+    public function increaseQuantity( Product $product) {
+
+        if ($product->increaseQuantity()) {
+            $product->quantity = $product->quantity + 1;
+            $product->save();
+            return redirect()
+                    ->route('products.show', [$product])
+                    ->with('message', "Product quantity increased successfully");
+        }
     }
 }

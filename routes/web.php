@@ -18,3 +18,5 @@ Route::put('/products/{product}', [ProductController::class, 'update'])->name('p
 Route::post('/products/{product}/tags', [ProductController::class, 'storeTag'])->name('products.tags.store');
 Route::delete('/products/{product}/tags/{tag}', [ProductController::class, 'destroyTag'])->name('products.tags.destroy');
 Route::get('/tags/search', [TagController::class, 'search'])->name('tags.search');
+Route::post('/products/{product}/decreaseQuantity', [ProductController::class, 'decreaseQuantity'])->name('products.decrease');
+Route::post('/products/{product}/increaseQuantity', [ProductController::class, 'increaseQuantity'])->name('products.increase');
