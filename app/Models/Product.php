@@ -15,6 +15,9 @@ class Product extends Model
         'description',
     ];
 
+    public function tags() {
+        return $this->belongsToMany(Tag::class);
+    }
     function decreaseQuantity(){
         if ($this->quantity - 1 >= 0){
             return true;
